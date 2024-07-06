@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class Anasayfa extends StatefulWidget {
@@ -14,6 +15,10 @@ class _AnasayfaState extends State<Anasayfa> {
   bool switchKontrol = false;
   bool checkboxKontrol = false;
   int radioDeger = 0;
+  bool progressKontrol = false;
+  double ilerleme = 30.0;
+  var tfSaat = TextEditingController();
+  var tfTarih = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -113,13 +118,65 @@ class _AnasayfaState extends State<Anasayfa> {
                 ),
               ],
             ),
-            ElevatedButton(onPressed: (){
+            Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                ElevatedButton(onPressed: (){
+                  setState(() {
+                    progressKontrol = true;
+                  });
+                }, child: const Text("Başla")),
+                Visibility(visible: progressKontrol, child:  const CircularProgressIndicator()),
+                ElevatedButton(onPressed: (){
+                  setState(() {
+                    progressKontrol = false;
+                  });
+                }, child: const Text("Dur")),
+              ],
+            ),
+            Text(ilerleme.toInt().toString()),
+            Slider(max:100.0, min:0.0,value: ilerleme, onChanged: (veri){
               setState(() {
-                print("Switch durum: $switchKontrol");
-                print("Checkbox durum: $checkboxKontrol");
-                print("Radio durum: $radioDeger");
+                ilerleme = veri;
               });
-            }, child: const Text("Göster")),
+            }),
+            Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                SizedBox(width: 120,
+                  child: TextField(controller: tfSaat, decoration: const InputDecoration(hintText: "Saat"),
+                  ),
+                ),
+                IconButton(onPressed: (){
+                  showTimePicker(context: context, initialTime: TimeOfDay.fromDateTime(DateTime.now()))
+                  .then((value) {   //seçilen veriyi işlememizi sağlar
+                    tfSaat.text = "${value!.hour} : ${value!.minute}";
+                  });
+                }, icon: const Icon(Icons.access_time)),
+                SizedBox(width: 120,
+                  child: TextField(controller: tfTarih, decoration: const InputDecoration(hintText: "Tarih"),
+                  ),
+                ),
+                IconButton(onPressed: (){
+                  showDatePicker(context: context,
+                      initialDate: DateTime.now(),
+                      firstDate: DateTime(2000),
+                      lastDate: DateTime(2030)).
+                  then((value) {
+                    tfTarih.text = "${value!.day} / ${value!.month} / ${value.year}";
+                  });
+                }, icon: const Icon(Icons.date_range)),
+              ],
+            ),
+            Padding(
+              padding: const EdgeInsets.all(26.0),
+              child: ElevatedButton(onPressed: (){
+                setState(() {
+                  print("Switch durum: $switchKontrol");
+                  print("Checkbox durum: $checkboxKontrol");
+                  print("Radio durum: $radioDeger");
+                  print("Slider durum: ${ilerleme.toInt()}");
+                });
+              }, child: const Text("Göster")),
+            ),
           ],
         ),
       ),
