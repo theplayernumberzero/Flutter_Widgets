@@ -11,6 +11,9 @@ class _AnasayfaState extends State<Anasayfa> {
   var tfControl = TextEditingController();
   String alinanVeri = "";
   String resimAdi = "mutlu.png";
+  bool switchKontrol = false;
+  bool checkboxKontrol = false;
+  int radioDeger = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,8 +55,71 @@ class _AnasayfaState extends State<Anasayfa> {
                     });
                   }, child: const Text("UZGUN")),
                 ],
-              ),
+              )
             ),
+              Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  SizedBox(width: 200,
+                    child: SwitchListTile(
+                        title: const Text("Dart"),
+                        controlAffinity: ListTileControlAffinity.leading,
+                        value: switchKontrol,
+                        onChanged: (veri){
+                          setState(() {
+                          switchKontrol = veri;
+                          });
+                        }
+                    ),
+                  ),
+                  SizedBox(width: 200,
+                    child: CheckboxListTile(
+                        title: const Text("Flutter"),
+                        controlAffinity: ListTileControlAffinity.leading,
+                        value: checkboxKontrol,
+                        onChanged: (veri){
+                          setState(() {
+                            checkboxKontrol = veri!;
+                          });
+                        }
+                    ),
+                  ),
+                ],
+              ),
+            Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                SizedBox(width: 200,
+                  child: RadioListTile(
+                      title: const Text("Galatasaray"),
+                      value: 1,
+                      groupValue: radioDeger,
+                      onChanged: (veri){
+                        setState(() {
+                          radioDeger = veri!;
+                        });
+                      }
+                  ),
+                ),
+                SizedBox(width: 200,
+                  child: RadioListTile(
+                      title: const Text("Fenerbahçe"),
+                      value: 2,
+                      groupValue: radioDeger,
+                      onChanged: (veri){
+                        setState(() {
+                          radioDeger = veri!;
+                        });
+                      }
+                  ),
+                ),
+              ],
+            ),
+            ElevatedButton(onPressed: (){
+              setState(() {
+                print("Switch durum: $switchKontrol");
+                print("Checkbox durum: $checkboxKontrol");
+                print("Radio durum: $radioDeger");
+              });
+            }, child: const Text("Göster")),
           ],
         ),
       ),
